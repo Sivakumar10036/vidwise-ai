@@ -13,14 +13,42 @@ const favoriteRoutes = require("./routes/favoriteRoutes");
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+    "http://localhost:5173",
+    "https://vidwise-ai.vercel.app"
+];
+
+if (process.env.FRONTEND_URL) {
+    allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
+        credentials: true
+    })
+);
+
 app.use(express.json());
 
 connectDB();
 
 app.get("/", (req, res) => {
     res.json({
-        message: "Welcome to VidWise AI 🚀",
+        message: "Welcome to VidWise AI 🚀"
+    });
+});
+
+app.get("/api/health", (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "VidWise AI backend is running"
     });
 });
 
@@ -32,7 +60,7 @@ app.use("/api/favorites", favoriteRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log(
         `VidWise AI server running on port ${PORT}`
     );
