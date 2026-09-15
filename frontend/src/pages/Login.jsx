@@ -23,7 +23,7 @@ const Login = () => {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/api/auth/login",
+                `${import.meta.env.VITE_API_URL}/api/auth/login`,
                 {
                     method: "POST",
 
@@ -41,7 +41,9 @@ const Login = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message);
+                throw new Error(
+                    data.message || "Login failed"
+                );
             }
 
             login(data.user, data.token);
@@ -50,7 +52,9 @@ const Login = () => {
 
         } catch (error) {
 
-            setError(error.message);
+            setError(
+                error.message || "Unable to connect to server"
+            );
 
         } finally {
 
@@ -111,7 +115,9 @@ const Login = () => {
                         type="submit"
                         disabled={loading}
                     >
-                        {loading ? "Signing in..." : "Sign In"}
+                        {loading
+                            ? "Signing in..."
+                            : "Sign In"}
                     </button>
 
                 </form>
