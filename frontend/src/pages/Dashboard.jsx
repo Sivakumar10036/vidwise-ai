@@ -29,7 +29,7 @@ const Dashboard = () => {
 
             try {
                 const response = await fetch(
-                    "http://localhost:5000/api/favorites",
+                    `${import.meta.env.VITE_API_URL}/api/favorites`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
@@ -83,8 +83,8 @@ const Dashboard = () => {
         try {
             const response = await fetch(
                 isFavorite
-                    ? `http://localhost:5000/api/favorites/${encodeURIComponent(videoId)}`
-                    : "http://localhost:5000/api/favorites",
+                    ? `${import.meta.env.VITE_API_URL}/api/favorites/${encodeURIComponent(videoId)}`
+                    : `${import.meta.env.VITE_API_URL}/api/favorites`,
                 {
                     method: isFavorite ? "DELETE" : "POST",
                     headers: {
@@ -163,7 +163,7 @@ const Dashboard = () => {
             console.log("Searching for:", finalQuery);
 
             const response = await fetch(
-                `http://localhost:5000/api/youtube/search?query=${encodeURIComponent(
+                `${import.meta.env.VITE_API_URL}/api/youtube/search?query=${encodeURIComponent(
                     finalQuery
                 )}`,
                 {
