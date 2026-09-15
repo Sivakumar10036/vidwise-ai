@@ -22,7 +22,7 @@ const Signup = () => {
         try {
 
             const response = await fetch(
-                "http://localhost:5000/api/auth/register",
+                `${import.meta.env.VITE_API_URL}/api/auth/register`,
                 {
                     method: "POST",
 
@@ -41,14 +41,18 @@ const Signup = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                throw new Error(data.message);
+                throw new Error(
+                    data.message || "Registration failed"
+                );
             }
 
             navigate("/login");
 
         } catch (error) {
 
-            setError(error.message);
+            setError(
+                error.message || "Unable to connect to server"
+            );
 
         } finally {
 
