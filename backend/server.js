@@ -16,6 +16,7 @@ const app = express();
 app.use(
     cors({
         origin: function (origin, callback) {
+
             if (!origin) {
                 return callback(null, true);
             }
@@ -32,16 +33,23 @@ app.use(
                 new Error("Not allowed by CORS")
             );
         },
-        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+
+        methods: [
+            "GET",
+            "POST",
+            "PUT",
+            "DELETE",
+            "OPTIONS"
+        ],
+
         allowedHeaders: [
             "Content-Type",
             "Authorization"
         ],
+
         credentials: true
     })
 );
-
-app.options("*", cors());
 
 app.use(express.json());
 
