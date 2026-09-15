@@ -21,8 +21,12 @@ const Signup = () => {
 
         try {
 
+            const API_URL =
+                import.meta.env.VITE_API_URL ||
+                "https://vidwise-ai.onrender.com";
+
             const response = await fetch(
-                `${import.meta.env.VITE_API_URL}/api/auth/register`,
+                `${API_URL}/api/auth/register`,
                 {
                     method: "POST",
 
@@ -38,9 +42,20 @@ const Signup = () => {
                 }
             );
 
+            const contentType =
+                response.headers.get("content-type");
+
+            if (!contentType || !contentType.includes("application/json")) {
+
+                throw new Error(
+                    `Server returned an invalid response (${response.status})`
+                );
+            }
+
             const data = await response.json();
 
             if (!response.ok) {
+
                 throw new Error(
                     data.message || "Registration failed"
                 );
@@ -51,7 +66,8 @@ const Signup = () => {
         } catch (error) {
 
             setError(
-                error.message || "Unable to connect to server"
+                error.message ||
+                "Unable to connect to server"
             );
 
         } finally {
